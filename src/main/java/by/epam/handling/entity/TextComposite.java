@@ -1,6 +1,7 @@
 package by.epam.handling.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TextComposite implements TextComponent{
@@ -8,12 +9,26 @@ public class TextComposite implements TextComponent{
     private List<TextComponent> components;
 
     public TextComposite(TextComponentType type) {
+        this(type, new ArrayList<>());
+    }
+
+    public TextComposite(TextComponentType type, List<TextComponent> components) {
         this.type = type;
-        this.components = new ArrayList<>();
+        this.components = components;
     }
 
     public TextComponentType getType() {
         return type;
+    }
+
+    @Override
+    public List<TextComponent> getComponents() {
+        return List.copyOf(components);
+    }
+
+    @Override
+    public int getSize() {
+        return components.size();
     }
 
     public void setType(TextComponentType type) {
@@ -22,12 +37,16 @@ public class TextComposite implements TextComponent{
 
     @Override
     public boolean add(TextComponent component) {
-        return component.add(component);
+        return components.add(component);
+    }
+
+    public boolean addAll(Collection<? extends TextComponent> c) {
+        return components.addAll(c);
     }
 
     @Override
     public boolean remove(TextComponent component) {
-        return component.remove(component);
+        return components.remove(component);
     }
 
     @Override
@@ -49,10 +68,13 @@ public class TextComposite implements TextComponent{
     }
 
     @Override
-    public String toString() {//todo change
-        return "TextComposite{" +
-                "type=" + type +
-                ", components=" + components +
-                '}';
+    public String toString() {//todo first last
+        StringBuilder stringBuilder = new StringBuilder();
+        for (TextComponent element : components) {
+            stringBuilder.append(type.getPrefix())
+                         .append(element.toString())
+                         .append(type.getPostfix());
+        }
+        return stringBuilder.toString();
     }
 }

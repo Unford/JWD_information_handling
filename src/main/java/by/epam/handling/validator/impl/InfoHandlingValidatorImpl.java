@@ -1,17 +1,17 @@
 package by.epam.handling.validator.impl;
 
-import by.epam.handling.validator.InformationHandlingValidator;
+import by.epam.handling.validator.InfoHandlingValidator;
 
 import java.io.File;
 
-public class InformationHandlingValidatorImpl implements InformationHandlingValidator {//todo name's too long
-    private static InformationHandlingValidatorImpl instance;
+public class InfoHandlingValidatorImpl implements InfoHandlingValidator {
+    private static InfoHandlingValidatorImpl instance;
 
-    private InformationHandlingValidatorImpl(){}
+    private InfoHandlingValidatorImpl(){}
 
-    public static InformationHandlingValidatorImpl getInstance(){
+    public static InfoHandlingValidatorImpl getInstance(){
         if (instance == null){
-            instance = new InformationHandlingValidatorImpl();
+            instance = new InfoHandlingValidatorImpl();
         }
         return instance;
     }

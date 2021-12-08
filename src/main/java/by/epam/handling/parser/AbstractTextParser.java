@@ -3,6 +3,8 @@ package by.epam.handling.parser;
 import by.epam.handling.entity.TextComponent;
 
 public abstract class AbstractTextParser {
+    protected static final String LETTER_DELIMITER_REGEX = "";
+
     protected AbstractTextParser successor = DefaultTextParser.getInstance();
 
     protected AbstractTextParser(){}

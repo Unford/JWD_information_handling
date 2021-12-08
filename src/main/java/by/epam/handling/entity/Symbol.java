@@ -1,5 +1,7 @@
 package by.epam.handling.entity;
 
+import java.util.List;
+
 public class Symbol implements TextComponent{
     private char symbol;
     private SymbolType type;
@@ -9,7 +11,9 @@ public class Symbol implements TextComponent{
         this.type = type;
     }
 
-
+    public SymbolType getSymbolType() {
+        return type;
+    }
 
     @Override
     public boolean add(TextComponent component) {
@@ -19,6 +23,21 @@ public class Symbol implements TextComponent{
     @Override
     public boolean remove(TextComponent component) {
         throw new UnsupportedOperationException("Method remove is unsupported for class " + getClass());
+    }
+
+    @Override
+    public TextComponentType getType() {
+        return TextComponentType.SYMBOL;
+    }
+
+    @Override
+    public List<TextComponent> getComponents() {
+        throw new UnsupportedOperationException("Method getComponents is unsupported for class " + getClass());
+    }
+
+    @Override
+    public int getSize() {
+        throw new UnsupportedOperationException("Method getSize is unsupported for class " + getClass());
     }
 
     @Override
@@ -40,10 +59,7 @@ public class Symbol implements TextComponent{
     }
 
     @Override
-    public String toString() {//todo change
-        return "Symbol{" +
-                "symbol=" + symbol +
-                ", type=" + type +
-                '}';
+    public String toString() {
+        return String.valueOf(symbol);
     }
 }

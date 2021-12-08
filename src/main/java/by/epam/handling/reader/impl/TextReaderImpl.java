@@ -1,9 +1,9 @@
 package by.epam.handling.reader.impl;
 
-import by.epam.handling.exception.InformationHandlingException;
+import by.epam.handling.exception.InfoHandlingException;
 import by.epam.handling.reader.TextReader;
-import by.epam.handling.validator.InformationHandlingValidator;
-import by.epam.handling.validator.impl.InformationHandlingValidatorImpl;
+import by.epam.handling.validator.InfoHandlingValidator;
+import by.epam.handling.validator.impl.InfoHandlingValidatorImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,10 +21,10 @@ public class TextReaderImpl implements TextReader {
 
 
     @Override
-    public String read(String filename) throws InformationHandlingException {
-        InformationHandlingValidator validator = InformationHandlingValidatorImpl.getInstance();
+    public String read(String filename) throws InfoHandlingException {
+        InfoHandlingValidator validator = InfoHandlingValidatorImpl.getInstance();
         if (!validator.isValidFilepath(filename)){
-            throw new InformationHandlingException("File path is invalid: " + filename);
+            throw new InfoHandlingException("File path is invalid: " + filename);
         }
         String text;
         Path path = Paths.get(filename);
@@ -32,7 +32,7 @@ public class TextReaderImpl implements TextReader {
             text = br.lines().collect(Collectors.joining(LINE_DELIMITER));
         } catch (IOException e) {
             logger.log(Level.ERROR,"Input error while reading file", e);
-            throw new InformationHandlingException("Input error while reading file", e);
+            throw new InfoHandlingException("Input error while reading file", e);
         }
         logger.log(Level.INFO, "Read file {} is successful", path.getFileName());
         return text;

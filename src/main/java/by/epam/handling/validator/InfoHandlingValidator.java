@@ -1,5 +1,5 @@
 package by.epam.handling.validator;
 
-public interface InformationHandlingValidator {
+public interface InfoHandlingValidator {
     boolean isValidFilepath(String filepath);
 }
