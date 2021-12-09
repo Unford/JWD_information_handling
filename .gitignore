@@ -9,3 +9,4 @@
 .idea
 logs
 /src/main/java/by/epam/handling/main/
+target

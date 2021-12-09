@@ -9,5 +9,4 @@ public interface InfoHandlingService {
    int countSameWords(TextComponent text , String word);
    int countVowel(TextComponent text);
    int countConsonant(TextComponent text);
-
 }

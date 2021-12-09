@@ -6,6 +6,7 @@ public enum TextComponentType {//todo
     SENTENCE("", " "),
     LEXEME("", ""),
     WORD("", ""),
+    NUMBER("", ""),
     SYMBOL("", "");
 
     private String prefix;

@@ -3,19 +3,18 @@ package by.epam.handling.parser;
 import by.epam.handling.entity.TextComponent;
 
 public abstract class AbstractTextParser {
-    protected static final String LETTER_DELIMITER_REGEX = "";
 
-    protected AbstractTextParser successor = DefaultTextParser.getInstance();
+    protected AbstractTextParser nextParser = DefaultTextParser.getInstance();
 
     protected AbstractTextParser(){}
 
-    protected AbstractTextParser(AbstractTextParser successor){
-        this.successor = successor;
+    protected AbstractTextParser(AbstractTextParser nextParser){
+        this.nextParser = nextParser;
     }
 
     public abstract TextComponent parse(String text);
 
-    private static class DefaultTextParser extends AbstractTextParser {
+    private static class DefaultTextParser extends AbstractTextParser {//todo
         private static DefaultTextParser instance = new DefaultTextParser();
 
         private DefaultTextParser(){}

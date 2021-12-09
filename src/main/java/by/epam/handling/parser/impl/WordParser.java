@@ -1,18 +1,19 @@
 package by.epam.handling.parser.impl;
 
 import by.epam.handling.entity.TextComponent;
-import by.epam.handling.entity.TextComponentType;
 import by.epam.handling.entity.TextComposite;
 import by.epam.handling.parser.AbstractTextParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import static by.epam.handling.entity.TextComponentType.WORD;
+
 
 public class WordParser extends AbstractTextParser {//todo fifth parser
+    private static final String LETTER_DELIMITER_REGEX = "";
 
     private static WordParser instance;
 
     private WordParser(){
-        successor = LetterParser.getInstance();
+        nextParser = SymbolParser.getInstance();
     }
 
     public static WordParser getInstance(){
@@ -24,10 +25,10 @@ public class WordParser extends AbstractTextParser {//todo fifth parser
 
     @Override
     public TextComponent parse(String text) {
-        TextComponent wordComponent = new TextComposite(TextComponentType.WORD);
+        TextComponent wordComponent = new TextComposite(WORD);
 
         for (String letter : text.split(LETTER_DELIMITER_REGEX)) {
-            TextComponent letterComponent = successor.parse(letter);
+            TextComponent letterComponent = nextParser.parse(letter);
             wordComponent.add(letterComponent);
         }
         return wordComponent;

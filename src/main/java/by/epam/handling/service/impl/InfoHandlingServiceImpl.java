@@ -8,17 +8,20 @@ import by.epam.handling.service.InfoHandlingService;
 import java.util.Comparator;
 import java.util.List;
 
+import static by.epam.handling.entity.TextComponentType.*;
+
 public class InfoHandlingServiceImpl implements InfoHandlingService {//todo implement methods
     @Override
-    public TextComponent paragraphSort(TextComponent text) {
+    public TextComponent paragraphSort(TextComponent text) {//fixme
         TextComposite sortedText = null;
-        if (text.getType() == TextComponentType.TEXT){
+        if (text.getType() == TEXT){
             List<TextComponent> components = text.getComponents()
                     .stream()
-                    .filter(component -> component.getType() == TextComponentType.SENTENCE)
+                    .filter(component -> component.getType() == SENTENCE)
                     .sorted(Comparator.comparingInt(TextComponent::getSize))
                     .toList();
-            sortedText = new TextComposite(TextComponentType.TEXT , components);
+
+            sortedText = new TextComposite(TEXT , components);
         }
         return sortedText;
     }
@@ -26,14 +29,14 @@ public class InfoHandlingServiceImpl implements InfoHandlingService {//todo impl
     @Override
     public TextComponent findSentencesWithLongestWord(TextComponent text) {//fixme
         TextComposite longestSentence = null;
-        if (text.getType() == TextComponentType.PARAGRAPH){
+        if (text.getType() == PARAGRAPH){
             List<TextComponent> sentences = text.getComponents();
             TextComponent longestWord = findLongestWord(text);
-            longestSentence = new TextComposite(TextComponentType.PARAGRAPH);
+            longestSentence = new TextComposite(PARAGRAPH);
             longestSentence.addAll(sentences.stream()
                     .filter(component -> component.getComponents()
                                                   .stream()
-                                                  .filter(word -> word.getType() == TextComponentType.WORD)
+                                                  .filter(word -> word.getType() == WORD)
                             .anyMatch(word -> word.getSize() == longestWord.getSize())).toList());
         }
         return longestSentence;
