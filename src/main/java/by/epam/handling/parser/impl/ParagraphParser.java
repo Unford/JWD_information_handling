@@ -13,9 +13,8 @@ import java.util.regex.Pattern;
 import static by.epam.handling.entity.TextComponentType.PARAGRAPH;
 
 
-public class ParagraphParser extends AbstractTextParser {//todo second parser
+public class ParagraphParser extends AbstractTextParser {
     static Logger logger = LogManager.getLogger();
-    private static final String SENTENCE_DELIMITER_REGEX = ".+?[.!?…]+(\\s+|$)";
 
     public ParagraphParser(){
         nextParser = new SentenceParser();

@@ -7,8 +7,7 @@ import by.epam.handling.parser.AbstractTextParser;
 import static by.epam.handling.entity.TextComponentType.WORD;
 
 
-public class WordParser extends AbstractTextParser {//todo fifth parser
-    private static final String LETTER_DELIMITER_REGEX = "";
+public class WordParser extends AbstractTextParser {
 
     private static WordParser instance;
 

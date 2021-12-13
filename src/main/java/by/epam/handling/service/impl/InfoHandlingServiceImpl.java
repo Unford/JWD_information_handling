@@ -1,78 +1,115 @@
 package by.epam.handling.service.impl;
 
-import by.epam.handling.entity.TextComponent;
-import by.epam.handling.entity.TextComponentType;
-import by.epam.handling.entity.TextComposite;
+import by.epam.handling.entity.*;
 import by.epam.handling.service.InfoHandlingService;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static by.epam.handling.entity.TextComponentType.*;
+import static by.epam.handling.entity.SymbolType.*;
 
-public class InfoHandlingServiceImpl implements InfoHandlingService {//todo implement methods
+public class InfoHandlingServiceImpl implements InfoHandlingService {
+
     @Override
-    public TextComponent paragraphSort(TextComponent text) {//fixme
-        TextComposite sortedText = null;
-        if (text.getType() == TEXT){
-            List<TextComponent> components = text.getComponents()
-                    .stream()
-                    .filter(component -> component.getType() == SENTENCE)
-                    .sorted(Comparator.comparingInt(TextComponent::getSize))
-                    .toList();
+    public TextComponent paragraphSort(TextComponent text) {
+        TextComposite sortedText = new TextComposite(TEXT);
+        List<TextComponent> paragraphs = findAllComponents(text, PARAGRAPH);
 
-            sortedText = new TextComposite(TEXT , components);
-        }
+        List<TextComponent> sortedParagraphs = paragraphs.stream()
+                .sorted(Comparator.comparing(paragraph -> paragraph.getComponents().size()))
+                .toList();
+
+        sortedText.addAll(sortedParagraphs);
+
         return sortedText;
     }
 
     @Override
-    public TextComponent findSentencesWithLongestWord(TextComponent text) {//fixme
-        TextComposite longestSentence = null;
-        if (text.getType() == PARAGRAPH){
-            List<TextComponent> sentences = text.getComponents();
-            TextComponent longestWord = findLongestWord(text);
-            longestSentence = new TextComposite(PARAGRAPH);
-            longestSentence.addAll(sentences.stream()
-                    .filter(component -> component.getComponents()
-                                                  .stream()
-                                                  .filter(word -> word.getType() == WORD)
-                            .anyMatch(word -> word.getSize() == longestWord.getSize())).toList());
+    public List<TextComponent> findSentencesWithLongestWord(TextComponent text) {
+        List<TextComponent> sentences = findAllComponents(text, SENTENCE);
+
+        int maxLength = findLongestWordLength(text);
+
+        List<TextComponent> result = sentences.stream()
+                .filter(sentence -> sentence.getComponents()
+                        .stream()
+                        .flatMap(lexeme -> lexeme.getComponents().stream())
+                        .anyMatch(word -> word.getSize() == maxLength))
+                .toList();
+
+        return result;
+    }
+
+    private List<TextComponent> findAllComponents(TextComponent component, TextComponentType type){
+        List<TextComponent> result = new ArrayList<>();
+        Queue<TextComponent> queue = new ArrayDeque<>();
+        queue.add(component);
+
+        if (component.getType() == type){
+            result.add(component);
         }
-        return longestSentence;
+
+        while (!queue.isEmpty()) {
+            TextComponent current = queue.poll();
+            if (current.getType() != SYMBOL){
+
+                current.getComponents().forEach(child -> {
+                    if (child.getType() == type) {
+                        result.add(child);
+                    }
+                    queue.add(child);
+                });
+            }
+        }
+        return result;
     }
 
-    private TextComponent findLongestWord(TextComponent sentences){//fixme
-        TextComposite longestWord = new TextComposite(TextComponentType.WORD);
-        TextComponent component = sentences.getComponents().stream()
-                .max(Comparator.comparingInt(sentence -> sentence.getComponents()
-                                         .stream()
-                                         .max(Comparator.comparingInt(TextComponent::getSize))
-                                         .get()
-                                         .getSize()))
-                .get();
-        longestWord.add(component);
-        return longestWord;
-    }
-
-    @Override
-    public TextComponent deleteSentences(TextComponent text, int sizeBound) {
-        return null;
-    }
-
-    @Override
-    public int countSameWords(TextComponent text, String word) {
-        return 0;
-    }
-
-    @Override
-    public int countVowel(TextComponent text) {
-        return 0;
+    private int findLongestWordLength(TextComponent text){
+        int max = findAllComponents(text, WORD)
+                .stream()
+                .mapToInt(TextComponent::getSize)
+                .max().orElse(0);
+        return max;
     }
 
     @Override
-    public int countConsonant(TextComponent text) {
-        return 0;
+    public List<TextComponent> deleteSentences(TextComponent text, int sizeBound) {
+        List<TextComponent> sentences = findAllComponents(text, SENTENCE);
+
+        sentences = sentences.stream().filter(sentence -> sentence.getComponents().stream()
+                .flatMap(lexeme -> lexeme.getComponents().stream()
+                        .filter(word -> word.getType() == WORD))
+                .count() > sizeBound).toList();
+
+        return sentences;
     }
 
+    @Override
+    public Map<String, Long> countSameWords(TextComponent text) {
+        List<TextComponent> words = findAllComponents(text, WORD);
+        Map<String, Long> sameWords = words.stream()
+                .collect(Collectors.groupingBy(word -> word.toString().toLowerCase(), Collectors.counting()));
+        sameWords.entrySet().removeIf(count -> count.getValue() == 1);
+        return sameWords;
+    }
+
+    @Override
+    public long countVowel(TextComponent text) {
+        return countSymbolType(text, VOWEL);
+    }
+
+    @Override
+    public long countConsonant(TextComponent text) {
+        return countSymbolType(text, CONSONANT);
+    }
+
+    private long countSymbolType(TextComponent text, SymbolType type){
+        List<TextComponent> symbols = findAllComponents(text, SYMBOL);
+        long amount = symbols.stream()
+                .flatMap(sym -> sym.getComponents().stream()
+                        .filter(symbol -> ((Symbol) symbol).getSymbolType() == type))
+                .count();
+        return amount;
+    }
 }

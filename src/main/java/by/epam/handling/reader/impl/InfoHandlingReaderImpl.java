@@ -1,7 +1,7 @@
 package by.epam.handling.reader.impl;
 
 import by.epam.handling.exception.InfoHandlingException;
-import by.epam.handling.reader.TextReader;
+import by.epam.handling.reader.InfoHandlingReader;
 import by.epam.handling.validator.InfoHandlingValidator;
 import by.epam.handling.validator.impl.InfoHandlingValidatorImpl;
 import org.apache.logging.log4j.Level;
@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
-public class TextReaderImpl implements TextReader {
+public class InfoHandlingReaderImpl implements InfoHandlingReader {
     static Logger logger = LogManager.getLogger();
     private static final String LINE_DELIMITER = "\n";
 

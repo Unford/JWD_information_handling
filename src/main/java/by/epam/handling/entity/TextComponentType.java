@@ -1,13 +1,13 @@
 package by.epam.handling.entity;
 
-public enum TextComponentType {//todo
+public enum TextComponentType {
     TEXT("\t", "\n"),
-    PARAGRAPH("", ""),
-    SENTENCE("", " "),
-    LEXEME("", ""),
-    WORD("", ""),
-    NUMBER("", ""),
-    SYMBOL("", "");
+    PARAGRAPH(""),
+    SENTENCE(" "),
+    LEXEME(""),
+    WORD(""),
+    NUMBER(""),
+    SYMBOL("");
 
     private String prefix;
     private String postfix;
@@ -15,6 +15,9 @@ public enum TextComponentType {//todo
     TextComponentType(String prefix, String postfix) {
         this.prefix = prefix;
         this.postfix = postfix;
+    }
+    TextComponentType(String postfix) {
+        this("", postfix);
     }
 
     public String getPrefix() {

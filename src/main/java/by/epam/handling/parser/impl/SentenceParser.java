@@ -10,9 +10,8 @@ import org.apache.logging.log4j.Logger;
 import static by.epam.handling.entity.TextComponentType.SENTENCE;
 
 
-public class SentenceParser extends AbstractTextParser {//todo third parser
+public class SentenceParser extends AbstractTextParser {
     static Logger logger = LogManager.getLogger();
-    private static final String LEXEME_DELIMITER_REGEX = "\\s+";
 
     public SentenceParser(){
         nextParser = new LexemeParser();
@@ -23,7 +22,7 @@ public class SentenceParser extends AbstractTextParser {//todo third parser
         TextComponent sentenceComponent = new TextComposite(SENTENCE);
 
         for (String lexeme : text.split(LEXEME_DELIMITER_REGEX)) {
-            logger.log(Level.DEBUG, "lexeme: {}", lexeme.trim());
+            logger.log(Level.DEBUG, "lexeme: {}", lexeme);
             TextComponent lexemeComponent = nextParser.parse(lexeme.trim());
             sentenceComponent.add(lexemeComponent);
         }

@@ -9,9 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import static by.epam.handling.entity.TextComponentType.TEXT;
 
-public class TextParser extends AbstractTextParser {//todo first parser
+public class TextParser extends AbstractTextParser {
     static Logger logger = LogManager.getLogger();
-    private static final String PARAGRAPH_DELIMITER_REGEX = "\\n";
 
     public TextParser(){
         nextParser = new ParagraphParser();

@@ -68,7 +68,7 @@ public class TextComposite implements TextComponent{
     }
 
     @Override
-    public String toString() {//todo first last
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (TextComponent element : components) {
             stringBuilder.append(type.getPrefix())

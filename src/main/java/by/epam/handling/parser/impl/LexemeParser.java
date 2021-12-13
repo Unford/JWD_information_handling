@@ -11,42 +11,31 @@ import java.util.regex.Pattern;
 
 import static by.epam.handling.entity.TextComponentType.LEXEME;
 
-public class LexemeParser extends AbstractTextParser {//todo fourth parser
+public class LexemeParser extends AbstractTextParser {
     static Logger logger = LogManager.getLogger();
-
-    private static final String WORD_REGEX = "\\p{L}+";
-    private static final String PUNCTUATION_REGEX = "\\p{Punct}";//todo double
-    private static final String PUNCTUATION_WORD_REGEX = PUNCTUATION_REGEX + "|" + WORD_REGEX;
-    private static final String EXPRESSION_REGEX = "[^\\p{L}]+";
 
     @Override
     public TextComponent parse(String text) {
         TextComponent lexemeComponent = new TextComposite(LEXEME);
 
         TextComponent textComponent;
-            if (text.length() == 1){
-                    logger.log(Level.DEBUG, "Lexeme-Letter: {}", text);//todo
-                    nextParser = SymbolParser.getInstance();
-                    textComponent = nextParser.parse(text);
-                    lexemeComponent.add(textComponent);
-            }else {
-                if (text.matches(EXPRESSION_REGEX)){
-                    logger.log(Level.DEBUG, "Lexeme-Expression: {}", text);
-                    nextParser = new ExpressionParser();
-                    textComponent = nextParser.parse(text);
-                    lexemeComponent.add(textComponent);
-                }else {
-                    logger.log(Level.DEBUG, "Lexeme-Word-Punctuation: {}", text);
+                if (text.matches(SYMBOL_OR_WORD_REGEX)){
+                    logger.log(Level.DEBUG, "Lexeme-Word-Symbol: {}", text);
                     Pattern pattern = Pattern.compile(PUNCTUATION_WORD_REGEX);
                     Matcher matcher = pattern.matcher(text);
                     while (matcher.find()){
                         String textPart = matcher.group();
-                        nextParser = textPart.matches(PUNCTUATION_REGEX) ? SymbolParser.getInstance() : WordParser.getInstance();
+                        nextParser = textPart.length() == 1 ? SymbolParser.getInstance() : WordParser.getInstance();
                         textComponent = nextParser.parse(textPart);
                         lexemeComponent.add(textComponent);
                     }
+                }else if (text.matches(EXPRESSION_REGEX)){
+                    logger.log(Level.DEBUG, "Lexeme-Expression: {}", text);
+                    nextParser = ExpressionParser.getInstance();
+                    textComponent = nextParser.parse(text);
+                    lexemeComponent.add(textComponent);
                 }
-            }
+
         return lexemeComponent;
     }
 }
