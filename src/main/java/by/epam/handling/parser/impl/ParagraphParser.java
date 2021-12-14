@@ -4,8 +4,6 @@ import by.epam.handling.entity.TextComponent;
 import by.epam.handling.entity.TextComposite;
 import by.epam.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,10 +12,17 @@ import static by.epam.handling.entity.TextComponentType.PARAGRAPH;
 
 
 public class ParagraphParser extends AbstractTextParser {
-    static Logger logger = LogManager.getLogger();
+    private static ParagraphParser instance;
 
-    public ParagraphParser(){
-        nextParser = new SentenceParser();
+    private ParagraphParser(){
+        nextParser = SentenceParser.getInstance();
+    }
+
+    public static ParagraphParser getInstance(){
+        if (instance == null){
+            instance = new ParagraphParser();
+        }
+        return instance;
     }
 
     @Override

@@ -3,7 +3,7 @@ package by.epam.handling.entity;
 public enum TextComponentType {
     TEXT("\t", "\n"),
     PARAGRAPH(""),
-    SENTENCE(" "),
+    SENTENCE(" ", ""),
     LEXEME(""),
     WORD(""),
     NUMBER(""),

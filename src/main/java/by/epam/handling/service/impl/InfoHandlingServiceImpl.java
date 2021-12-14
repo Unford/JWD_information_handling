@@ -35,6 +35,7 @@ public class InfoHandlingServiceImpl implements InfoHandlingService {
                 .filter(sentence -> sentence.getComponents()
                         .stream()
                         .flatMap(lexeme -> lexeme.getComponents().stream())
+                        .filter(word -> word.getType() == WORD)
                         .anyMatch(word -> word.getSize() == maxLength))
                 .toList();
 
@@ -53,7 +54,6 @@ public class InfoHandlingServiceImpl implements InfoHandlingService {
         while (!queue.isEmpty()) {
             TextComponent current = queue.poll();
             if (current.getType() != SYMBOL){
-
                 current.getComponents().forEach(child -> {
                     if (child.getType() == type) {
                         result.add(child);
@@ -74,7 +74,7 @@ public class InfoHandlingServiceImpl implements InfoHandlingService {
     }
 
     @Override
-    public List<TextComponent> deleteSentences(TextComponent text, int sizeBound) {
+    public List<TextComponent> deleteSentencesLess(TextComponent text, int sizeBound) {
         List<TextComponent> sentences = findAllComponents(text, SENTENCE);
 
         sentences = sentences.stream().filter(sentence -> sentence.getComponents().stream()
@@ -107,8 +107,7 @@ public class InfoHandlingServiceImpl implements InfoHandlingService {
     private long countSymbolType(TextComponent text, SymbolType type){
         List<TextComponent> symbols = findAllComponents(text, SYMBOL);
         long amount = symbols.stream()
-                .flatMap(sym -> sym.getComponents().stream()
-                        .filter(symbol -> ((Symbol) symbol).getSymbolType() == type))
+                .filter(symbol -> ((Symbol) symbol).getSymbolType() == type)
                 .count();
         return amount;
     }

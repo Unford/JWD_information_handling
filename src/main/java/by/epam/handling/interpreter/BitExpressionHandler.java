@@ -2,14 +2,18 @@ package by.epam.handling.interpreter;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+
+import static by.epam.handling.interpreter.BitComponent.OPEN_BRACKET;
 
 public class BitExpressionHandler {
     private Context context = new Context();
+    private BitExpressionInterpreter interpreter = new BitExpressionInterpreter();
 
     private List<String> parseToPolishNotation(List<String> tokens){
         List<String> polishNotation = new ArrayList<>();
-        ArrayDeque<String> stack = new ArrayDeque<>();
+        Deque<String> stack = new ArrayDeque<>();
 
         tokens.forEach(token -> {
             BitComponent current = BitComponent.parse(token);
@@ -17,7 +21,7 @@ public class BitExpressionHandler {
                 case NUMBER -> polishNotation.add(token);
                 case OPEN_BRACKET -> stack.push(token);
                 case CLOSE_BRACKET -> {
-                    while (!BitComponent.parse(stack.peek()).equals(BitComponent.OPEN_BRACKET)){
+                    while (!BitComponent.parse(stack.peek()).equals(OPEN_BRACKET)){
                         polishNotation.add(stack.pop());
                     }
                     stack.pop();
@@ -25,11 +29,10 @@ public class BitExpressionHandler {
                 default -> {
                     while (!stack.isEmpty()){
                         BitComponent component = BitComponent.parse(stack.peek());
-                        if (component.getPriority() >= current.getPriority()){
-                            polishNotation.add(stack.pop());
-                        }else {
+                        if (component.getPriority() < current.getPriority()){
                             break;
                         }
+                        polishNotation.add(stack.pop());
                     }
                     stack.push(token);
                 }
@@ -43,7 +46,6 @@ public class BitExpressionHandler {
     }
 
     public int handleExpression(List<String> tokens){
-        BitExpressionInterpreter interpreter = new BitExpressionInterpreter();
         List<String> polishNotation = parseToPolishNotation(tokens);
         interpreter.interpret(polishNotation)
                 .forEach(terminal -> terminal.interpret(context));

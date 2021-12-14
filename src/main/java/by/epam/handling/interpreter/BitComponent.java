@@ -12,8 +12,8 @@ public enum BitComponent {
     CLOSE_BRACKET(")", -1),
     NUMBER("\\d+", 0);
 
-    private String component;
-    private int priority;
+    private final String component;
+    private final int priority;
 
     BitComponent(String component, int priority){
         this.component = component;

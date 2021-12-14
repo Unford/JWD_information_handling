@@ -4,17 +4,22 @@ import by.epam.handling.entity.TextComponent;
 import by.epam.handling.entity.TextComposite;
 import by.epam.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import static by.epam.handling.entity.TextComponentType.SENTENCE;
 
 
 public class SentenceParser extends AbstractTextParser {
-    static Logger logger = LogManager.getLogger();
+    private static SentenceParser instance;
 
-    public SentenceParser(){
-        nextParser = new LexemeParser();
+    private SentenceParser(){
+        nextParser = LexemeParser.getInstance();
+    }
+
+    public static SentenceParser getInstance(){
+        if (instance == null){
+            instance = new SentenceParser();
+        }
+        return instance;
     }
 
     @Override

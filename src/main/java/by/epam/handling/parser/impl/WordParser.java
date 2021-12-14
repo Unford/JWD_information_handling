@@ -3,6 +3,7 @@ package by.epam.handling.parser.impl;
 import by.epam.handling.entity.TextComponent;
 import by.epam.handling.entity.TextComposite;
 import by.epam.handling.parser.AbstractTextParser;
+import org.apache.logging.log4j.Level;
 
 import static by.epam.handling.entity.TextComponentType.WORD;
 
@@ -25,11 +26,12 @@ public class WordParser extends AbstractTextParser {
     @Override
     public TextComponent parse(String text) {
         TextComponent wordComponent = new TextComposite(WORD);
-
+        logger.log(Level.DEBUG, "Word: {}", text);
         for (String letter : text.split(LETTER_DELIMITER_REGEX)) {
             TextComponent letterComponent = nextParser.parse(letter);
             wordComponent.add(letterComponent);
         }
+
         return wordComponent;
     }
 }

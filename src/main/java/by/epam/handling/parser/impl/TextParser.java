@@ -4,16 +4,22 @@ import by.epam.handling.entity.TextComponent;
 import by.epam.handling.entity.TextComposite;
 import by.epam.handling.parser.AbstractTextParser;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 import static by.epam.handling.entity.TextComponentType.TEXT;
 
 public class TextParser extends AbstractTextParser {
-    static Logger logger = LogManager.getLogger();
+    private static TextParser instance;
 
-    public TextParser(){
-        nextParser = new ParagraphParser();
+    private TextParser(){
+        nextParser = ParagraphParser.getInstance();
+    }
+
+    public static TextParser getInstance(){
+        if (instance == null){
+            instance = new TextParser();
+        }
+        return instance;
     }
 
     @Override
@@ -25,6 +31,7 @@ public class TextParser extends AbstractTextParser {
             TextComponent paragraphComponent = nextParser.parse(paragraph.trim());
             textComponent.add(paragraphComponent);
         }
+        logger.log(Level.INFO, "Parsing text is successful: {}", textComponent);
         return textComponent;
     }
 }
